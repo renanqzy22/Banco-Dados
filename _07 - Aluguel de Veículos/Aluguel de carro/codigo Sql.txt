@@ -1,0 +1,143 @@
+-- Tabela de Clientes
+CREATE TABLE tb_cliente (
+    cliente_id INTEGER PRIMARY KEY,
+    nome TEXT,
+    telefone TEXT UNIQUE,
+    cnh TEXT UNIQUE
+);
+
+-- Tabela de Veículos
+CREATE TABLE tb_veiculo (
+    veiculo_id INTEGER PRIMARY KEY,
+    modelo TEXT,
+    ano INTEGER,
+    placa TEXT UNIQUE,
+    disponibilidade BOOLEAN
+);
+
+-- Tabela de Aluguéis
+CREATE TABLE tb_aluguel (
+    aluguel_id INTEGER PRIMARY KEY,
+    cliente_id INTEGER,
+    veiculo_id INTEGER,
+    data_inicio DATE,
+    data_fim DATE,
+    FOREIGN KEY (cliente_id) REFERENCES tb_cliente (cliente_id),
+    FOREIGN KEY (veiculo_id) REFERENCES tb_veiculo (veiculo_id)
+);
+
+------------------------------------------------------------------------------------------
+
+-- Inserir registros em tb_cliente
+INSERT INTO tb_cliente (nome, telefone, cnh) VALUES
+    ('João Silva', '123-456-7890', 'CNH12345'),
+    ('Maria Souza', '987-654-3210', 'CNH54321'),
+    ('Pedro Santos', '555-555-5555', 'CNH11111'),
+    ('Ana Oliveira', '777-888-9999', 'CNH77777'),
+    ('Carlos Pereira', '111-222-3333', 'CNH99999'),
+    ('Lucia Alves', '444-444-4444', 'CNH55555'),
+    ('Mariana Lima', '666-777-8888', 'CNH66666'),
+    ('Rafael Rodrigues', '333-333-3333', 'CNH88888');
+
+-- Inserir registros em tb_veiculo
+INSERT INTO tb_veiculo (modelo, ano, placa, disponibilidade) VALUES
+    ('Toyota Corolla', 2022, 'ABC123', 1),
+    ('Honda Civic', 2021, 'XYZ456', 1),
+    ('Ford Focus', 2020, 'DEF789', 0),
+    ('Volkswagen Golf', 2022, 'GHI101', 1),
+    ('Chevrolet Cruze', 2021, 'JKL123', 0),
+    ('Nissan Sentra', 2020, 'MNO456', 1),
+    ('Hyundai Elantra', 2022, 'PQR789', 1),
+    ('Kia Forte', 2021, 'STU101', 0);
+
+-- Inserir registros em tb_aluguel (usando IDs das entradas nas tabelas anteriores)
+INSERT INTO tb_aluguel (cliente_id, veiculo_id, data_inicio, data_fim) VALUES
+    (1, 1, '2023-09-15', '2023-09-20'),
+    (2, 3, '2023-09-10', '2023-09-17'),
+    (3, 5, '2023-09-08', '2023-09-12'),
+    (4, 2, '2023-09-18', '2023-09-25'),
+    (5, 6, '2023-09-11', '2023-09-14'),
+    (6, 4, '2023-09-22', '2023-09-28'),
+    (7, 7, '2023-09-14', '2023-09-21'),
+    (8, 8, '2023-09-19', '2023-09-26');
+	
+--------------------------------------------------------------------------------------------
+
+-- Consulta por telefone
+SELECT * FROM tb_cliente WHERE telefone = '123-456-7890';
+
+-- Consulta por CNH
+SELECT * FROM tb_cliente WHERE cnh = 'CNH54321';
+
+-- Consulta com campos específicos
+SELECT nome, cnh FROM tb_cliente;
+
+---------------------------------------------------------------------------------------------
+
+-- Consulta por ano
+SELECT * FROM tb_veiculo WHERE ano = 2022;
+
+-- Consulta por ID
+SELECT * FROM tb_veiculo WHERE veiculo_id = 3;
+
+-- Consulta por disponibilidade
+SELECT * FROM tb_veiculo WHERE disponibilidade = 1;
+
+---------------------------------------------------------------------------------------------
+
+SELECT
+    c.nome AS cliente_nome,
+    c.cnh AS cliente_cnh,
+    v.modelo AS veiculo_modelo,
+    v.placa AS veiculo_placa,
+    v.disponibilidade,
+    a.aluguel_id,
+    a.data_inicio,
+    a.data_fim
+FROM tb_aluguel a
+INNER JOIN tb_cliente c ON a.cliente_id = c.cliente_id
+INNER JOIN tb_veiculo v ON a.veiculo_id = v.veiculo_id;
+
+-----------------------------------------------------------------------------------------------
+
+SELECT
+    c.nome AS cliente_nome,
+    c.cnh AS cliente_cnh,
+    v.modelo AS veiculo_modelo,
+    v.placa AS veiculo_placa,
+    v.disponibilidade,
+    a.aluguel_id,
+    a.data_inicio,
+    a.data_fim
+FROM tb_aluguel a
+INNER JOIN tb_cliente c ON a.cliente_id = c.cliente_id
+INNER JOIN tb_veiculo v ON a.veiculo_id = v.veiculo_id
+WHERE v.disponibilidade = 1;
+
+------------------------------------------------------------------------------------------------
+
+SELECT
+    c.nome AS cliente_nome,
+    c.cnh AS cliente_cnh,
+    v.modelo AS veiculo_modelo,
+    v.placa AS veiculo_placa,
+    v.disponibilidade,
+    a.aluguel_id,
+    a.data_inicio,
+    a.data_fim
+FROM tb_aluguel a
+INNER JOIN tb_cliente c ON a.cliente_id = c.cliente_id
+INNER JOIN tb_veiculo v ON a.veiculo_id = v.veiculo_id
+WHERE v.disponibilidade = 0;
+
+------------------------------------------------------------------------------------------------
+
+-- Alterar o ano do veículo com ID 3
+UPDATE tb_veiculo SET ano = 2023 WHERE veiculo_id = 3;
+
+-------------------------------------------------------------------------------------------------
+
+-- Excluir o registro de aluguel com ID 1
+DELETE FROM tb_aluguel WHERE aluguel_id =
+
+-------------------------------------------------------------------------------------------------
