@@ -1,0 +1,96 @@
+-- Criação da tabela Plataformas
+
+CREATE TABLE Plataformas (
+    cod_plataforma INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    fabricante TEXT NOT NULL
+);
+
+-----------------------------------------------------------------------------
+
+-- Criação da tabela Jogos
+
+CREATE TABLE Jogos (
+    cod_jogo INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    genero TEXT NOT NULL,
+    lancamento DATE NOT NULL,
+    cod_plataforma INTEGER,
+    FOREIGN KEY (cod_plataforma) REFERENCES Plataformas(cod_plataforma)
+);
+
+-----------------------------------------------------------------------------
+
+-- Inserção de registros na tabela Plataformas
+
+INSERT INTO Plataformas (nome, fabricante) VALUES
+('PlayStation 5', 'Sony'),
+('Xbox Series X', 'Microsoft'),
+('Nintendo Switch', 'Nintendo'),
+('PC', 'Vários Fabricantes');
+
+-----------------------------------------------------------------------------
+
+-- Inserção de registros na tabela Jogos
+
+INSERT INTO Jogos (titulo, genero, lancamento, cod_plataforma) VALUES
+('The Last of Us Part II', 'Ação e Aventura', '2020-06-19', 1), 
+('Cyberpunk 2077', 'RPG', '2020-12-10', 4),                       
+('Assassin''s Creed Valhalla', 'Ação e Aventura', '2020-11-10', 2), 
+('Animal Crossing: New Horizons', 'Simulação', '2020-03-20', 3),   
+('Doom Eternal', 'Tiro em Primeira Pessoa', '2020-03-20', 4),     
+('Spider-Man: Miles Morales', 'Ação e Aventura', '2020-11-12', 1), 
+('The Legend of Zelda: Breath of the Wild', 'Ação e Aventura', '2017-03-03', 3), 
+('Halo Infinite', 'Tiro em Primeira Pessoa', '2021-12-08', 2),   
+('FIFA 22', 'Esportes', '2021-10-01', 1),                       
+('Among Us', 'Multijogador', '2018-11-16', 4); 
+
+-----------------------------------------------------------------------------
+
+SELECT *
+FROM Jogos
+WHERE cod_plataforma = (SELECT cod_plataforma FROM Plataformas WHERE nome = 'PlayStation 5');
+
+SELECT *
+FROM Jogos
+WHERE genero = 'Aventura';
+
+SELECT Plataformas.nome AS plataforma_nome, Plataformas.fabricante,
+       Jogos.titulo, Jogos.lancamento, Jogos.genero
+FROM Jogos
+INNER JOIN Plataformas ON Jogos.cod_plataforma = Plataformas.cod_plataforma;
+
+-----------------------------------------------------------------------------
+
+-- Alteração da data de lançamento de jogos específicos
+
+UPDATE Jogos
+SET lancamento = '2022-01-01'
+WHERE titulo = 'The Last of Us Part II';
+
+UPDATE Jogos
+SET lancamento = '2022-02-15'
+WHERE titulo = 'Cyberpunk 2077';
+
+UPDATE Jogos
+SET lancamento = '2022-03-30'
+WHERE titulo = 'Assassin''s Creed Valhalla';
+
+UPDATE Jogos
+SET lancamento = '2022-04-10'
+WHERE titulo = 'Spider-Man: Miles Morales';
+
+-----------------------------------------------------------------------------
+
+-- Exclusão de jogos específicos
+
+DELETE FROM Jogos WHERE titulo = 'Doom Eternal';
+DELETE FROM Jogos WHERE titulo = 'Halo Infinite';
+DELETE FROM Jogos WHERE titulo = 'FIFA 22';
+DELETE FROM Jogos WHERE titulo = 'Among Us';
+
+
+
+ 
+
+
